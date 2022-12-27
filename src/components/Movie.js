@@ -1,62 +1,27 @@
 import React from "react";
+import { MovieContext } from "./MovieContext";
 
-export const MovieContext = React.createContext();
-
-class MovieProvider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      movies: [
-        {
-          id: 1,
-          title: "The Shawshank Redemption",
-          year: 1994,
-          director: "Frank Darabont",
-        },
-        {
-          id: 2,
-          title: "The Godfather",
-          year: 1972,
-          director: "Francis Ford Coppola",
-        },
-        {
-          id: 3,
-          title: "The Godfather: Part II",
-          year: 1974,
-          director: "Francis Ford Coppola",
-        },
-        {
-          id: 4,
-          title: "The Dark Knight",
-          year: 2008,
-          director: "Christopher Nolan",
-        },
-        {
-          id: 5,
-          title: "12 Angry",
-          year: 1957,
-          director: "Sidney Lumet",
-        },
-      ],
-      selectedMovieId: -1,
-      changeSelectedMovieId: () => {},
-    };
-  }
+class Movie extends React.Component {
+  static contextType = MovieContext;
 
   render() {
-    console.log(this.state.selectedMovieId);
+    const { movies, selectedMovieId } = this.context;
+    const movie = movies.find((movie) => movie.id === selectedMovieId);
+
     return (
-      <MovieContext.Provider
-        value={{
-          movies: this.state.movies,
-          selectedMovieId: this.state.selectedMovieId,
-          setState: this.setState.bind(this),
-        }}
-      >
-        {this.props.children}
-      </MovieContext.Provider>
+      <div id="movie-banner">
+        {movie ? (
+          <>
+            <h2>{movie.title}</h2>
+            <h2>{movie.year}</h2>
+            <h2>{movie.director}</h2>
+          </>
+        ) : (
+          <h1>Invalid Id</h1>
+        )}
+      </div>
     );
   }
 }
 
-export default MovieProvider;
+export default Movie;
